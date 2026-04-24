@@ -1,7 +1,9 @@
 package slices
 
 import (
+	"regexp"
 	"sort"
+	"strings"
 )
 
 // ComparableT is a list of types that can be compared that is semi-broken in
@@ -30,7 +32,9 @@ type ComparableT interface {
 //
 // ~rune is an alias of ~int32.
 // ~byte is an alias of ~uint8.
-func SliceDedupe[T ComparableT](s []T) []T {
+//
+// https://hackernoon.com/how-to-remove-duplicates-in-go-slices
+func Dedupe[T ComparableT](s []T) []T {
 	// If there are 0 or 1 items we return the slice itself.
 	if len(s) < 2 { // lint:allow_raw_numbers
 		return s
@@ -66,4 +70,33 @@ func StringSliceToHashmap(slice []string) map[string]struct{} {
 	}
 
 	return hashmap
+}
+
+// FilterSubstr will filter a slice of any type by a substring. The callback is
+// used to convert the type to a string for comparison.
+func FilterSubstr[T any](u []T, s string, callback func(T) string) []T {
+	out := make([]T, 0, len(u))
+
+	for i := range u {
+		if strings.Contains(callback(u[i]), s) {
+			out = append(out, u[i])
+		}
+	}
+
+	return out
+}
+
+// FilterRegex will filter a slice of any type by a regular expression. The
+// callback is used to convert the type to a string for comparison.
+func FilterRegex[T any](u []T, r string, callback func(T) string) []T {
+	out := make([]T, 0, len(u))
+	re := regexp.MustCompile(r)
+
+	for i := range u {
+		if re.MatchString(callback(u[i])) {
+			out = append(out, u[i])
+		}
+	}
+
+	return out
 }
