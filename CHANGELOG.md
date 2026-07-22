@@ -6,11 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), adheres t
 
 ## Unreleased
 
-### :tractor: Refactor
+### :tractor: refactor
 
 * [`289d613`](https://github.com/northwood-labs/x/commit/289d61394c90aa4fef22f9b17081a563223f3292): Adopted new project structure and added new tools and configurations. ([@skyzyx](https://github.com/skyzyx))
 
-### <!-- 0 -->:rocket: Features
+### <!-- 0 -->:rocket: features
 
 * [`d96ee59`](https://github.com/northwood-labs/x/commit/d96ee590fe5c25b6a14a4e6e089e7f0e62410429): Initial commit. ([@skyzyx](https://github.com/skyzyx))
 * [`36de3b2`](https://github.com/northwood-labs/x/commit/36de3b25470db25919cb0667a8f6abf4f1057c34): Add slice filtering functions and lint configuration. ([@skyzyx](https://github.com/skyzyx))

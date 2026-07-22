@@ -266,6 +266,7 @@ linters:
             - github.com/gin-contrib/
             - github.com/gin-gonic/
             - github.com/go-enry/go-enry
+            - github.com/go-openapi/testify
             - github.com/google/go-cmp
             - github.com/google/go-github
             - github.com/grpc-ecosystem/
@@ -292,7 +293,6 @@ linters:
             - github.com/rs/zerolog
             - github.com/spf13/cobra
             - github.com/spf13/viper
-            - github.com/stretchr/testify
             - github.com/teekennedy/goldmark-markdown
             - github.com/valkey-io/valkey-go
             - github.com/valkey-io/valkey-go/valkeycompat
@@ -358,6 +358,9 @@ linters:
 
             - pkg: "github.com/sirupsen/logrus"
               desc: Use charm.land/log/v2 (with log/slog) for CLIs or github.com/rs/zerolog for servers instead.
+
+            - pkg: "github.com/stretchr/testify"
+              desc: Use github.com/go-openapi/testify instead.
 
             - pkg: "go.uber.org/zap"
               desc: Use charm.land/log/v2 (with log/slog) for CLIs or github.com/rs/zerolog for servers instead.
@@ -2177,7 +2180,7 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
-          arguments: [5]
+          arguments: [20]
 
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#modifies-parameter
         - name: modifies-parameter

@@ -1,0 +1,132 @@
+{
+  "pbtResults": {
+    "1. Write bug condition exploration test": {
+      "status": "passed",
+      "failingExample": "All tests fail on unfixed code confirming the bug exists:\n\n1. TestBugCondition_EmbeddedStruct: Profile value is raw `structutils.Profile{Hobby:\"Two Color Ball\"}` instead of `map[string]any{\"Hobby\": \"Two Color Ball\"}`. Inner field \"Hobby\" leaks to top-level map. Result has 4 keys instead of expected 3.\n\n2. TestBugCondition_MultiLevelNesting: Result is `map[string]any{\"B\":structutils.Middle{...}, \"C\":structutils.Inner{Val:1}, \"Val\":1}` — all levels flattened to top with raw struct values.\n\n3. TestBugCondition_MultipleNestedFieldsSameLevel: Result has 6 keys instead of 3. Inner fields (Name, City, Country) leak to top level. Customer and Address stored as raw structs.\n\n4. TestBugCondition_DeeplyNested: Result has 5 keys (CEO, Coords, Home, Lat, Lon) — all levels flattened with raw struct values. Expected 1 key (CEO) containing nested maps.\n\n5. TestBugCondition_PointerToStruct: Details stored as raw `structutils.Customer{Name:\"Alice\"}`. Inner field Name overwrites parent Name field (\"test\" becomes \"Alice\").\n\n6. TestBugCondition_NilPointerToStruct: PANIC — `reflect: call of reflect.Value.Interface on zero Value` at structs.go:64. Nil pointer dereference causes crash.\n\n7. Property tests (rapid): All fail after 0 tests. Counterexamples: Order{Customer:\"\",Address:\"\",Total:0} — Customer field is `structutils.Customer` not `map[string]any`. Company{CEO:Person{...}} — CEO is `structutils.Person` not `map[string]any`. WithPointer{Details:&Customer{}} — Details is `structutils.Customer` not `map[string]any`.\n\nRoot causes confirmed: (1) missing `continue` after struct detection — falls through to General Fields storing raw struct, (2) queue-based iteration flattens all fields to single top-level map, (3) nil pointer .Interface() causes panic.",
+      "lastRunTimestamp": 1784747326706
+    },
+    "2. Write preservation property tests (BEFORE implementing fix)": {
+      "status": "passed",
+      "lastRunTimestamp": 1784747648380
+    },
+    "3.2 Verify bug condition exploration test now passes": {
+      "status": "passed",
+      "lastRunTimestamp": 1784747817670
+    },
+    "3.3 Verify preservation tests still pass": {
+      "status": "passed",
+      "lastRunTimestamp": 1784747848914
+    }
+  },
+  "executionHistory": {
+    "1. Write bug condition exploration test": [
+      {
+        "executionId": "ab704c0e-dd9f-40eb-b713-994282431429",
+        "chatSessionId": "sess_a09b5778-4342-4af1-be46-2bf451225d72",
+        "timestamp": 1784746962374
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747031274
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747343028
+      }
+    ],
+    "2. Write preservation property tests (BEFORE implementing fix)": [
+      {
+        "executionId": "ab704c0e-dd9f-40eb-b713-994282431429",
+        "chatSessionId": "sess_a09b5778-4342-4af1-be46-2bf451225d72",
+        "timestamp": 1784746962485
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747349513
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747667702
+      }
+    ],
+    "3.1 Implement the fix": [
+      {
+        "executionId": "ab704c0e-dd9f-40eb-b713-994282431429",
+        "chatSessionId": "sess_a09b5778-4342-4af1-be46-2bf451225d72",
+        "timestamp": 1784746962559
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747671388
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747779962
+      }
+    ],
+    "3.2 Verify bug condition exploration test now passes": [
+      {
+        "executionId": "ab704c0e-dd9f-40eb-b713-994282431429",
+        "chatSessionId": "sess_a09b5778-4342-4af1-be46-2bf451225d72",
+        "timestamp": 1784746962614
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747787392
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747827551
+      }
+    ],
+    "3.3 Verify preservation tests still pass": [
+      {
+        "executionId": "ab704c0e-dd9f-40eb-b713-994282431429",
+        "chatSessionId": "sess_a09b5778-4342-4af1-be46-2bf451225d72",
+        "timestamp": 1784746962667
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747831201
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747858274
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "ab704c0e-dd9f-40eb-b713-994282431429",
+        "chatSessionId": "sess_a09b5778-4342-4af1-be46-2bf451225d72",
+        "timestamp": 1784746962759
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747862665
+      },
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747930725
+      }
+    ],
+    "3. Fix for nested struct handling in ToFlattenedMap": [
+      {
+        "executionId": "469909f5-6fdd-4137-8445-6492ab5bb3d7",
+        "chatSessionId": "sess_1e26c248-0a5e-4235-b849-30729b945e9f",
+        "timestamp": 1784747858358
+      }
+    ]
+  }
+}
