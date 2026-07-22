@@ -1,0 +1,68 @@
+---
+# This workflow uses actions that are not certified by GitHub. They are provided
+# by a third-party and are governed by separate terms of service, privacy
+# policy, and support documentation.
+
+# @config-manager:start workflow-name
+name: Auto-merge Dependabot Pull Requests
+# @config-manager:end workflow-name
+
+on:
+  # @config-manager:start workflow-on
+  pull_request:
+  # @config-manager:end workflow-on
+
+concurrency:
+  # @config-manager:start workflow-concurrency
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+  # @config-manager:end workflow-concurrency
+
+# Declare default permissions as read only.
+# @config-manager:start workflow-permissions
+permissions: read-all
+# @config-manager:end workflow-permissions
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    name: Auto-merge Dependabot PRs
+    timeout-minutes: 2
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == github.event.pull_request.head.repo.full_name
+    permissions:
+      # @config-manager:start workflow-permissions-job
+      contents: write
+      issues: write
+      pull-requests: write
+      repository-projects: write
+      # @config-manager:end workflow-permissions-job
+    steps:
+      # @config-manager:start workflow-steps
+      - name: Harden Runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
+        with:
+          disable-sudo: true
+          egress-policy: block
+
+      - name: Dependabot metadata
+        id: metadata
+        uses: step-security/dependabot-fetch-metadata@bf8fb6e0be0a711c669dc236de6e7f7374ba626e # v3.1.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Auto-merge Dependabot PRs for semver-minor updates
+        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-minor'}}
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          gh pr merge --auto --squash "${PR_URL}"
+
+      - name: Auto-merge Dependabot PRs for semver-patch updates
+        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-patch'}}
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          gh pr merge --auto --squash "${PR_URL}"
+    # @config-manager:end workflow-steps

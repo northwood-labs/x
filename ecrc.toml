@@ -1,20 +1,38 @@
 ##
 # Generate with:
-#   tomljson ecrc.toml > .ecrc
+#   tomljson ecrc.toml > .editorconfig-checker.json
 ##
 
-# goplicate-start:config
+# @config-manager:start config
 Debug           = false
 IgnoreDefaults  = true
 NoColor         = false
 SpacesAfterTabs = false
 Verbose         = false
-# goplicate-end:config
+# @config-manager:end config
 
 Exclude = [
-  # goplicate-start:excludes
+  # @config-manager:start excludes
+  # Directories
+  "\\.config-manager\\.d/",
+  "\\.github/workflows/",
+  "\\.kiro/",
+  "\\.kirograph/",
+  "\\.rumdl_cache/",
+  "\\.venv",
+  "\\.vite/",
+  "node_modules/",
+  "testdata/",
+  "testfixtures/.*$",
+
+  # Files
+  "Cargo\\.lock$",
+  "LICENSE(\\.(md|txt))?$",
+  "Taskfile\\.([^\\.]+)\\.(yaml|yml)$",
+  "Taskfile\\.(yaml|yml)$",
+  "TerraformOptions.json$",
   "\\.7z$",
-  "\\.avif",
+  "\\.avif$",
   "\\.bak$",
   "\\.bin$",
   "\\.bz2$",
@@ -22,36 +40,48 @@ Exclude = [
   "\\.css\\.map$",
   "\\.dcignore$",
   "\\.ecrc$",
+  "\\.editorconfig-checker\\.json$",
   "\\.eot$",
   "\\.example$",
   "\\.gif$",
+  "\\.git/.*$",
   "\\.go$",
-  "\\.golangci.yml$",
-  "\\.goreleaser.yml$",
+  "\\.golangci\\.yml$",
+  "\\.goreleaser\\.yml$",
   "\\.gotmpl$",
   "\\.gz$",
   "\\.ico$",
+  "\\.infracost/.*$",
   "\\.jpeg$",
   "\\.jpg$",
   "\\.js\\.map$",
+  "\\.jsonschema\\.json$",
+  "\\.lefthook-local/.*$",
+  "\\.lefthook/.*$",
+  "\\.licenses\\.cache\\.json$",
+  "\\.lock$",
   "\\.log$",
   "\\.mp4$",
   "\\.otf$",
+  "\\.out$",
   "\\.patch$",
-  "\\.pbm",
+  "\\.pbm$",
   "\\.pdf$",
-  "\\.pgm",
+  "\\.pgm$",
   "\\.png$",
-  "\\.pnm",
-  "\\.ppm",
+  "\\.pnm$",
+  "\\.ppm$",
   "\\.snap$",
   "\\.svg$",
   "\\.tar$",
   "\\.terraform-docs\\.yml$",
+  "\\.terraform/.*$",
   "\\.terraform\\.lock\\.hcl$",
+  "\\.tfstate$",
+  "\\.tfstate\\.backup$",
   "\\.ttf$",
   "\\.txt$",
-  "\\.vscode/.*?\\.json$",
+  "\\.vscode/.*?\\.(json|sh|toml|yaml|yml)$",
   "\\.webp$",
   "\\.wmv$",
   "\\.woff$",
@@ -61,16 +91,23 @@ Exclude = [
   "^\\.pnp\\.js$",
   "^\\.pnp\\.loader\\.mjs$",
   "^\\.yarn/",
-  "^Cargo\\.lock$",
-  "^composer\\.lock$",
   "^package-lock\\.json$",
-  "^yarn\\.lock$",
+  "aube-lock\\.yaml$",
   "cliff\\.toml$",
+  "composer\\.lock$",
   "go\\.mod$",
   "go\\.sum$",
+  "go\\.tools\\.mod$",
+  "go\\.tools\\.sum$",
+  "manifest\\.json$",
   "min\\.css$",
   "min\\.js$",
   "package-lock\\.json$",
+  "package\\.json$",
+  "pnpm-lock\\.yaml$",
+  "pnpm-workspace\\.yaml$",
+  "poetry\\.lock$",
   "standard\\.mk$",
-  # goplicate-end:excludes
+  "yarn\\.lock$",
+  # @config-manager:end excludes
 ]

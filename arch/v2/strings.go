@@ -1,3 +1,17 @@
+// Copyright 2026, Northwood Labs, LLC <license@northwood-labs.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package arch
 
 const (
@@ -15,12 +29,12 @@ const (
 	wasm  = "WebAssembly"
 )
 
-// go tool dist list
+// go tool dist list.
 
 var (
 	// OSMap is a mapping of GOOS values to "friendly" values.
 	// https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63
-	// https://github.com/golang/go/blob/master/src/go/build/syslist.go
+	// http://bit.ly/4b8bHz3
 	OSMap = map[string]string{
 		"aix":       "IBM AIX",        // https://www.ibm.com/products/aix
 		"android":   "Android",        // https://www.android.com
@@ -43,7 +57,7 @@ var (
 
 	// ArchMap is a mapping of GOARCH values to "friendly" values.
 	// https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63
-	// https://github.com/golang/go/blob/master/src/go/build/syslist.go
+	// http://bit.ly/4b8bHz3
 	ArchMap = map[string]string{
 		"386":         intel + b32,
 		"amd64":       intel + b64,

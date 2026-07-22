@@ -1,3 +1,17 @@
+// Copyright 2026, Northwood Labs, LLC <license@northwood-labs.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package aws
 
 import (
@@ -14,10 +28,11 @@ import (
 
 var errUnknownRegion = errors.New("please specify an AWS region")
 
-// NoOpRateLimit to prevent limiting of queries to AWS.
 type (
+	// NoOpRateLimit to prevent limiting of queries to AWS.
 	NoOpRateLimit struct{}
 
+	// AWSConfigOptions to manage AWS configuration options.
 	AWSConfigOptions struct {
 		Region  string
 		Profile string
@@ -43,7 +58,8 @@ func noOpToken() error {
 // GetAWSConfig returns a standard AWS config object pre-configured for use with
 // regions, retries, and verbosity.
 //
-// If region is empty, we will attempt to read AWS_REGION then AWS_DEFAULT_REGION.
+// If region is empty, we will attempt to read AWS_REGION then
+// AWS_DEFAULT_REGION.
 func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, error) {
 	var (
 		emptyConfig = aws.Config{}
@@ -57,6 +73,7 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 
 	if len(opts) > 0 {
 		opt := opts[0]
+
 		region = opt.Region
 		profile = opt.Profile
 		retries = opt.Retries
@@ -86,17 +103,15 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 		ctx,
 		config.WithRegion(region),
 		config.WithRetryer(func() aws.Retryer {
-			// https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/retries-timeouts/
+			// https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/configure-retries-timeouts.html
 			retryLogic := retry.NewStandard()
 			retry.AddWithMaxAttempts(retryLogic, retries)
 
 			return retryLogic
 		}),
-		func(profile string) config.LoadOptionsFunc {
-			return config.WithSharedConfigProfile(profile)
-		}(profile),
+		config.WithSharedConfigProfile(profile),
 		func(verbose bool) config.LoadOptionsFunc {
-			// https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/logging/
+			// https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/configure-logging.html
 			if !verbose {
 				return config.WithClientLogMode(0)
 			}

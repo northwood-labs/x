@@ -1,0 +1,10 @@
+##
+# Remove/replace these entries to what is appropriate to your repository.
+#
+# https://google.github.io/osv-scanner/configuration/
+##
+
+# [[IgnoredVulns]]
+#   id = "GO-2022-0646"
+#   reason = "Not leveraging this functionality in our codebase"
+#   # ignoreUntil = YYYY-MM-DD

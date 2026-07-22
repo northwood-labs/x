@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+# @config-manager:start generate-contribs
 # see also ".mailmap" for how email addresses and names are deduplicated
 OUT="${1:-.}"
 {
@@ -19,3 +20,4 @@ OUT="${1:-.}"
 
 } >"${OUT}/CONTRIBUTORS"
 cat "${OUT}/CONTRIBUTORS"
+# @config-manager:end generate-contribs

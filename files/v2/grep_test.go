@@ -1,3 +1,17 @@
+// Copyright 2026, Northwood Labs, LLC <license@northwood-labs.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package files
 
 import (
@@ -20,8 +34,9 @@ func TestGrepFileFound(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
+
 	if !found {
-		t.Fatalf("expected match, got no match")
+		t.Fatal("expected match, got no match")
 	}
 }
 
@@ -39,8 +54,9 @@ func TestGrepFileNotFound(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
+
 	if found {
-		t.Fatalf("expected no match, got match")
+		t.Fatal("expected no match, got match")
 	}
 }
 
@@ -56,10 +72,11 @@ func TestGrepFileInvalidRegex(t *testing.T) {
 
 	found, err := GrepFile(path, "[")
 	if err == nil {
-		t.Fatalf("expected regex compile error, got nil")
+		t.Fatal("expected regex compile error, got nil")
 	}
+
 	if found {
-		t.Fatalf("expected found=false on error, got true")
+		t.Fatal("expected found=false on error, got true")
 	}
 }
 
@@ -71,9 +88,10 @@ func TestGrepFileMissingFile(t *testing.T) {
 
 	found, err := GrepFile(path, "hello")
 	if err == nil {
-		t.Fatalf("expected read error, got nil")
+		t.Fatal("expected read error, got nil")
 	}
+
 	if found {
-		t.Fatalf("expected found=false on error, got true")
+		t.Fatal("expected found=false on error, got true")
 	}
 }

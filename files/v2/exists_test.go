@@ -1,3 +1,17 @@
+// Copyright 2026, Northwood Labs, LLC <license@northwood-labs.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package files
 
 import (
@@ -17,7 +31,7 @@ func TestFileExistsFile(t *testing.T) {
 	}
 
 	if !FileExists(path) {
-		t.Fatalf("expected file to exist")
+		t.Fatal("expected file to exist")
 	}
 }
 
@@ -28,7 +42,7 @@ func TestFileExistsMissing(t *testing.T) {
 	path := filepath.Join(dir, "does-not-exist.txt")
 
 	if FileExists(path) {
-		t.Fatalf("expected missing file to return false")
+		t.Fatal("expected missing file to return false")
 	}
 }
 
@@ -38,6 +52,6 @@ func TestFileExistsDirectory(t *testing.T) {
 	dir := t.TempDir()
 
 	if FileExists(dir) {
-		t.Fatalf("expected directory path to return false")
+		t.Fatal("expected directory path to return false")
 	}
 }

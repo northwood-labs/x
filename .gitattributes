@@ -1,8 +1,9 @@
 # Helps Git use the right algorithms for diffs
 # https://git-scm.com/docs/gitattributes
 
+# @config-manager:start gitattributes
 # Auto detect text files and perform LF normalization
-# https://www.davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+# https://bit.ly/49DTx7v
 *          text=auto
 
 # Front-end
@@ -53,22 +54,28 @@ Makefile   text eol=lf
 *README*   text eol=lf
 
 # Graphics
-*.png      filter=lfs diff=lfs merge=lfs -text
-*.jpg      filter=lfs diff=lfs merge=lfs -text
-*.jpeg     filter=lfs diff=lfs merge=lfs -text
-*.gif      filter=lfs diff=lfs merge=lfs -text
-*.tif      filter=lfs diff=lfs merge=lfs -text
-*.tiff     filter=lfs diff=lfs merge=lfs -text
-*.ico      filter=lfs diff=lfs merge=lfs -text
-*.eps      filter=lfs diff=lfs merge=lfs -text
+*.acorn    filter=lfs diff=lfs merge=lfs binary
+*.ai       filter=lfs diff=lfs merge=lfs binary
+*.eps      filter=lfs diff=lfs merge=lfs binary
+*.gif      filter=lfs diff=lfs merge=lfs binary
+*.ico      filter=lfs diff=lfs merge=lfs binary
+*.jpeg     filter=lfs diff=lfs merge=lfs binary
+*.jpg      filter=lfs diff=lfs merge=lfs binary
+*.pdf      filter=lfs diff=lfs merge=lfs binary
+*.png      filter=lfs diff=lfs merge=lfs binary
+*.pxd      filter=lfs diff=lfs merge=lfs binary
+*.pxm      filter=lfs diff=lfs merge=lfs binary
 *.svg      text eol=lf
-*.svgz     filter=lfs diff=lfs merge=lfs -text
-*.webp     filter=lfs diff=lfs merge=lfs -text
+*.svgz     filter=lfs diff=lfs merge=lfs binary
+*.tif      filter=lfs diff=lfs merge=lfs binary
+*.tiff     filter=lfs diff=lfs merge=lfs binary
+*.webp     filter=lfs diff=lfs merge=lfs binary
 
 # Scripts
 *.bash     text eol=lf
 *.fish     text eol=lf
 *.sh       text eol=lf
+*.zsh      text eol=lf
 
 # These are explicitly windows files and should use crlf
 *.bat      text eol=crlf
@@ -130,3 +137,4 @@ package-lock.json text eol=lf -diff
 
 # Ignore files (like .npmignore or .gitignore)
 *.*ignore  text eol=lf
+# @config-manager:end gitattributes

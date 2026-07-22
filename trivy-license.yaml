@@ -1,0 +1,218 @@
+---
+# @config-manager:start extras
+dependency-tree: true
+exit-code: 0
+format: table
+ignore-policy: ""
+ignorefile: .trivyignore
+include-dev-deps: false
+insecure: false
+list-all-pkgs: true
+output: ""
+quiet: true
+report: summary
+timeout: 5m0s
+# @config-manager:end extras
+
+cache:
+  # @config-manager:start cache
+  backend: fs
+  # @config-manager:end cache
+
+db:
+  # @config-manager:start db
+  download-java-only: false
+  download-only: false
+  java-repository: ghcr.io/aquasecurity/trivy-java-db
+  java-skip-update: false
+  light: false
+  no-progress: false
+  repository: ghcr.io/aquasecurity/trivy-db
+  skip-update: false
+  # @config-manager:end db
+
+license:
+  # @config-manager:start license
+  confidencelevel: "0.9"
+  forbidden:
+    - AGPL-1.0
+    - AGPL-3.0
+    - CC-BY-NC-1.0
+    - CC-BY-NC-2.0
+    - CC-BY-NC-2.5
+    - CC-BY-NC-3.0
+    - CC-BY-NC-4.0
+    - CC-BY-NC-ND-1.0
+    - CC-BY-NC-ND-2.0
+    - CC-BY-NC-ND-2.5
+    - CC-BY-NC-ND-3.0
+    - CC-BY-NC-ND-4.0
+    - CC-BY-NC-SA-1.0
+    - CC-BY-NC-SA-2.0
+    - CC-BY-NC-SA-2.5
+    - CC-BY-NC-SA-3.0
+    - CC-BY-NC-SA-4.0
+    - Commons-Clause
+    - Facebook-2-Clause
+    - Facebook-3-Clause
+    - Facebook-Examples
+  full: true
+  ignored: []
+  notice:
+    - AFL-1.1
+    - AFL-1.2
+    - AFL-2.0
+    - AFL-2.1
+    - AFL-3.0
+    - Apache-1.0
+    - Apache-1.1
+    - Apache-2.0
+    - Artistic-1.0
+    - Artistic-1.0-cl8
+    - Artistic-1.0-Perl
+    - Artistic-2.0
+    - BlueOak-1.0.0
+    - BSD-2-Clause
+    - BSD-2-Clause-FreeBSD
+    - BSD-2-Clause-NetBSD
+    - BSD-3-Clause
+    - BSD-3-Clause-Attribution
+    - BSD-3-Clause-Clear
+    - BSD-3-Clause-LBNL
+    - BSD-4-Clause
+    - BSD-4-Clause-UC
+    - BSD-Protection
+    - BSL-1.0
+    - CC-BY-1.0
+    - CC-BY-2.0
+    - CC-BY-2.5
+    - CC-BY-3.0
+    - CC-BY-4.0
+    - FTL
+    - ImageMagick
+    - ISC
+    - Libpng
+    - Lil-1.0
+    - Linux-OpenIB
+    - LPL-1.0
+    - LPL-1.02
+    - MIT
+    - MIT-0
+    - MS-PL
+    - NCSA
+    - OpenSSL
+    - PHP-3.0
+    - PHP-3.01
+    - PIL
+    - PostgreSQL
+    - Python-2.0
+    - Python-2.0-complete
+    - SGI-B-1.0
+    - SGI-B-1.1
+    - SGI-B-2.0
+    - Unicode-DFS-2015
+    - Unicode-DFS-2016
+    - Unicode-TOU
+    - UPL-1.0
+    - W3C
+    - W3C-19980720
+    - W3C-20150513
+    - X11
+    - Xnet
+    - Zend-2.0
+    - Zlib
+    - zlib-acknowledgement
+    - ZPL-1.1
+    - ZPL-2.0
+    - ZPL-2.1
+  permissive:
+    - WTFPL
+  reciprocal:
+    - APSL-1.0
+    - APSL-1.1
+    - APSL-1.2
+    - APSL-2.0
+    - CDDL-1.0
+    - CDDL-1.1
+    - CPL-1.0
+    - EPL-1.0
+    - EPL-2.0
+    - FreeImage
+    - IPL-1.0
+    - MPL-1.0
+    - MPL-1.1
+    - MPL-2.0
+    - Ruby
+  restricted:
+    - BCL
+    - CC-BY-ND-1.0
+    - CC-BY-ND-2.0
+    - CC-BY-ND-2.5
+    - CC-BY-ND-3.0
+    - CC-BY-ND-4.0
+    - CC-BY-SA-1.0
+    - CC-BY-SA-2.0
+    - CC-BY-SA-2.5
+    - CC-BY-SA-3.0
+    - CC-BY-SA-4.0
+    - GPL-1.0
+    - GPL-2.0
+    - GPL-2.0-with-autoconf-exception
+    - GPL-2.0-with-bison-exception
+    - GPL-2.0-with-classpath-exception
+    - GPL-2.0-with-font-exception
+    - GPL-2.0-with-GCC-exception
+    - GPL-3.0
+    - GPL-3.0-with-autoconf-exception
+    - GPL-3.0-with-GCC-exception
+    - LGPL-2.0
+    - LGPL-2.1
+    - LGPL-3.0
+    - NPL-1.0
+    - NPL-1.1
+    - OSL-1.0
+    - OSL-1.1
+    - OSL-2.0
+    - OSL-2.1
+    - OSL-3.0
+    - QPL-1.0
+    - Sleepycat
+  unencumbered:
+    - 0BSD
+    - CC0-1.0
+    - Unlicense
+    # @config-manager:end license
+
+misconfiguration:
+  # @config-manager:start misconfiguration
+  include-non-failures: false
+  policy-bundle-repository: ghcr.io/aquasecurity/defsec:0
+  # @config-manager:end misconfiguration
+
+scan:
+  # @config-manager:start scan
+  compliance: ""
+  file-patterns: []
+  offline: false
+  rekor-url: https://rekor.sigstore.dev
+  sbom-sources: []
+  scanners:
+    - license
+  skip-dirs: []
+  skip-files: []
+  slow: false
+  # @config-manager:end scan
+
+secret:
+  # @config-manager:start secret
+  config: trivy-secret.yaml
+  # @config-manager:end secret
+
+severity:
+  # @config-manager:start severity
+  # - UNKNOWN
+  # - LOW
+  # - MEDIUM
+  - HIGH
+  - CRITICAL
+  # @config-manager:end severity
