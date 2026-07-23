@@ -148,6 +148,11 @@
   destination = '.kirograph/.gitignore'
 
 [[files]]
+  stub        = 'configs/stubs/.kiro/steering/adversarial-review.md'
+  source      = 'configs/templates/.kiro/steering/adversarial-review.md'
+  destination = '.kiro/steering/adversarial-review.md'
+
+[[files]]
   stub        = 'configs/stubs/.kiro/steering/markdown-style.md'
   source      = 'configs/templates/.kiro/steering/markdown-style.md'
   destination = '.kiro/steering/markdown-style.md'

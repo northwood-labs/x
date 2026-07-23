@@ -16,8 +16,13 @@ package files
 
 import "os"
 
-// FileExists checks if a file exists at the given path. It returns true if the
-// file exists and is not a directory, and false otherwise.
+// FileExists reports whether a regular file (not a directory) exists at
+// the given path. CLI tools call this before reading or overwriting a
+// file to provide clear error messages ("file not found") rather than
+// letting downstream os.Open failures bubble up with less context.
+// Directories are excluded because callers that care about a directory
+// use os.Stat directly — conflating the two would mask bugs where a
+// path accidentally points to a directory.
 func FileExists(filename string) bool {
 	info, err := os.Stat(filename)
 	if os.IsNotExist(err) {

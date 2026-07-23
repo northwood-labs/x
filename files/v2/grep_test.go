@@ -20,6 +20,8 @@ import (
 	"testing"
 )
 
+// TestGrepFileFound confirms that a simple substring pattern matches
+// file content and returns true without error.
 func TestGrepFileFound(t *testing.T) {
 	t.Parallel()
 
@@ -40,6 +42,9 @@ func TestGrepFileFound(t *testing.T) {
 	}
 }
 
+// TestGrepFileNotFound verifies the negative case: a pattern that does
+// not appear in the file content returns false without error, so
+// callers can distinguish "not found" from "something broke."
 func TestGrepFileNotFound(t *testing.T) {
 	t.Parallel()
 
@@ -60,6 +65,9 @@ func TestGrepFileNotFound(t *testing.T) {
 	}
 }
 
+// TestGrepFileInvalidRegex ensures that a malformed regex surfaces an
+// error rather than silently returning false. Callers pass
+// user-supplied patterns, so invalid input must be reported.
 func TestGrepFileInvalidRegex(t *testing.T) {
 	t.Parallel()
 
@@ -80,6 +88,9 @@ func TestGrepFileInvalidRegex(t *testing.T) {
 	}
 }
 
+// TestGrepFileMissingFile verifies that attempting to grep a
+// non-existent file returns an error and false, rather than panicking
+// on the failed read.
 func TestGrepFileMissingFile(t *testing.T) {
 	t.Parallel()
 

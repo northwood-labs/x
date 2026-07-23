@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Forked from https://www.sobyte.net/post/2021-06/several-ways-to-convert-struct-to-mapstringinterface/
-
 package structutils
 
 import (
@@ -22,33 +20,66 @@ import (
 	"testing"
 )
 
-// ExampleToMap demonstrates the basic conversion of a flat struct to a
-// map, serving as living documentation that Go's test runner verifies.
-func ExampleToMap() {
+// ExampleToLogger demonstrates flat struct conversion to slog-ready
+// key-value pairs, verifying that keys appear in sorted order.
+func ExampleToLogger() {
 	type Person struct {
 		Name string
 		Age  int
 	}
 
-	result, err := ToMap(Person{Name: "Alice", Age: 30})
+	result, err := ToLogger(Person{Name: "Alice", Age: 30})
 	if err != nil {
 		fmt.Println("error:", err)
 
 		return
 	}
 
-	fmt.Println("Name:", result["Name"])
-	fmt.Println("Age:", result["Age"])
+	for i := 0; i < len(result); i += 2 {
+		fmt.Printf("%s: %v\n", result[i], result[i+1])
+	}
+
 	// Output:
-	// Name: Alice
 	// Age: 30
+	// Name: Alice
 }
 
-// BenchmarkToMap measures allocation and throughput for ToMap across
-// varying struct shapes (flat, nested, deep, multi-nested). This
-// ensures that future changes don't regress allocation counts or
-// per-op latency.
-func BenchmarkToMap(b *testing.B) {
+// ExampleToLogger_nested demonstrates dot-notation flattening for
+// nested structs, proving that hierarchy is preserved in key names.
+func ExampleToLogger_nested() {
+	type Address struct {
+		City    string
+		Country string
+	}
+
+	type Contact struct {
+		Name    string
+		Address Address
+	}
+
+	result, err := ToLogger(Contact{
+		Name:    "Bob",
+		Address: Address{City: "London", Country: "UK"},
+	})
+	if err != nil {
+		fmt.Println("error:", err)
+
+		return
+	}
+
+	for i := 0; i < len(result); i += 2 {
+		fmt.Printf("%s: %v\n", result[i], result[i+1])
+	}
+
+	// Output:
+	// Address.City: London
+	// Address.Country: UK
+	// Name: Bob
+}
+
+// BenchmarkToLogger measures allocation and throughput for ToLogger
+// across varying nesting depths, establishing a performance baseline.
+func BenchmarkToLogger(b *testing.B) {
 	b.ReportAllocs()
 
 	benchCases := map[string]any{
@@ -78,56 +109,60 @@ func BenchmarkToMap(b *testing.B) {
 			b.ResetTimer()
 
 			for range b.N {
-				_, _ = ToMap(input) // lint:allow_unhandled
+				_, _ = ToLogger(input) // lint:allow_unhandled
 			}
 		})
 	}
 }
 
-// BenchmarkToMapParallel stresses ToMap under goroutine contention to
-// confirm the function is safe for concurrent use (no shared mutable
-// state) and to surface any hidden lock contention.
-func BenchmarkToMapParallel(b *testing.B) {
+// BenchmarkToLoggerParallel confirms ToLogger is goroutine-safe and
+// measures contention under parallel workloads.
+func BenchmarkToLoggerParallel(b *testing.B) { // lint:no_dupe
 	b.ReportAllocs()
 
-	benchCases := map[string]any{
-		"flat_struct": Settings{
+	type benchCase struct {
+		input any
+		name  string
+	}
+
+	cases := []benchCase{
+		{name: "flat_struct", input: Settings{
 			Verbose: true, Timeout: 30, Name: "bench",
-		},
-		"nested_struct": UserInfo{
+		}},
+		{name: "nested_struct", input: UserInfo{
 			Name: "q1mi", Age: 18,
 			Profile: Profile{Hobby: "reading"},
-		},
-		"deep_nesting": Company{
+		}},
+		{name: "deep_nesting", input: Company{
 			CEO: Person{
 				Home: Location{
 					Coords: GPS{Lat: 51.5, Lon: -0.1},
 				},
 			},
-		},
-		"multiple_nested": Order{
+		}},
+		{name: "multiple_nested", input: Order{
 			Customer: Customer{Name: "Ada"},
 			Address:  Address{City: "London", Country: "UK"},
 			Total:    99,
-		},
+		}},
 	}
 
-	for name, input := range benchCases {
-		b.Run(name, func(b *testing.B) {
+	for _, tc := range cases {
+		b.Run(tc.name, func(b *testing.B) {
 			b.ResetTimer()
 			b.RunParallel(func(pb *testing.PB) {
 				for pb.Next() {
-					_, _ = ToMap(input) // lint:allow_unhandled
+					_, _ = ToLogger(tc.input) // lint:allow_unhandled
 				}
 			})
 		})
 	}
 }
 
-// FuzzToMap feeds randomly-generated JSON payloads through ToMap to
-// uncover panics or incorrect error handling on malformed or extreme
-// input that hand-written tests would never cover.
-func FuzzToMap(f *testing.F) {
+// FuzzToLogger feeds randomly-generated JSON payloads through
+// ToLogger to surface panics or invariant violations (e.g., odd-
+// length output) on unexpected input shapes.
+func FuzzToLogger(f *testing.F) {
 	// Seed the corpus with JSON-encoded structs of varying shapes.
 	seeds := []any{
 		Settings{Verbose: true, Timeout: 30, Name: "test"},
@@ -148,7 +183,7 @@ func FuzzToMap(f *testing.F) {
 
 	f.Fuzz(
 		func(t *testing.T, jsonInput string) {
-			// Decode into a Settings struct and run ToMap.
+			// Decode into a Settings struct and run ToLogger.
 			var s Settings
 
 			decodeErr := json.Unmarshal([]byte(jsonInput), &s)
@@ -156,13 +191,17 @@ func FuzzToMap(f *testing.F) {
 				return
 			}
 
-			result, err := ToMap(s)
+			result, err := ToLogger(s)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
 
 			if result == nil {
-				t.Fatal("expected non-nil map")
+				t.Fatal("expected non-nil slice")
+			}
+
+			if len(result)%2 != 0 {
+				t.Fatalf("result length must be even, got %d", len(result))
 			}
 		},
 	)

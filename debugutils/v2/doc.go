@@ -12,5 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package debugutils provides a set of debugging utilities.
+// Package debugutils provides helpers for inspecting complex data
+// structures during development. When debugging deeply nested structs
+// or maps, the standard %v/%+v formatting is often unreadable.
+// This package wraps go-spew with project-consistent formatting
+// defaults so every developer gets identical, deterministic output
+// without configuring the library each time.
 package debugutils

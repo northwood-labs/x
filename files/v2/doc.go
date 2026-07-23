@@ -12,5 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package files provides a set of utilities for working with files.
+// Package files provides filesystem query helpers that CLI tools use
+// for pre-flight checks. Before attempting to read, copy, or sync a
+// file, callers need to know whether the path exists and whether its
+// content matches an expected pattern. Wrapping os.Stat and
+// regexp.Match behind simple boolean APIs keeps that logic out of
+// command handlers and makes it trivially testable.
 package files

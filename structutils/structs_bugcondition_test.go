@@ -23,7 +23,9 @@ import (
 )
 
 // Validates: Requirements 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 2.4.
-// Diverse struct types beyond UserInfo/Profile.
+// These struct types exercise diverse nesting patterns (multi-level,
+// pointer, nil pointer, unexported fields) to ensure ToMap handles
+// every real-world shape without silently flattening or losing data.
 type (
 	// Customer represents a customer with a name.
 	Customer struct {
@@ -113,8 +115,9 @@ type (
 	}
 )
 
-// TestBugCondition_EmbeddedStruct tests the primary bug case from the
-// design document.
+// TestBugCondition_EmbeddedStruct is the primary regression test for
+// the original bug: embedded struct fields must produce nested maps,
+// not leak their inner fields to the top level.
 func TestBugCondition_EmbeddedStruct(t *testing.T) {
 	input := UserInfo{
 		Name:    "q1mi",
@@ -151,8 +154,9 @@ func TestBugCondition_EmbeddedStruct(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-// TestBugCondition_MultiLevelNesting tests 3-level nesting:
-// Outer -> Middle -> Inner.
+// TestBugCondition_MultiLevelNesting verifies that 3-level nesting
+// (Outer -> Middle -> Inner) recursively produces nested maps at
+// every level, not just one level deep.
 func TestBugCondition_MultiLevelNesting(t *testing.T) {
 	input := Outer{B: Middle{C: Inner{Val: 1}}}
 
@@ -169,8 +173,9 @@ func TestBugCondition_MultiLevelNesting(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-// TestBugCondition_MultipleNestedFieldsSameLevel tests structs with
-// multiple nested struct fields at the same level.
+// TestBugCondition_MultipleNestedFieldsSameLevel verifies that when
+// a struct has multiple struct-typed fields at the same level, each
+// one independently becomes a nested map without cross-contamination.
 func TestBugCondition_MultipleNestedFieldsSameLevel(t *testing.T) {
 	input := Order{
 		Customer: Customer{Name: "Ada"},
@@ -198,7 +203,9 @@ func TestBugCondition_MultipleNestedFieldsSameLevel(t *testing.T) {
 		"inner field City must not leak to top level")
 }
 
-// TestBugCondition_DeeplyNested tests 4+ levels of nesting.
+// TestBugCondition_DeeplyNested stresses 4+ levels of nesting to
+// confirm the recursion terminates correctly and produces the full
+// nested map hierarchy.
 func TestBugCondition_DeeplyNested(t *testing.T) {
 	input := Company{
 		CEO: Person{
@@ -224,8 +231,8 @@ func TestBugCondition_DeeplyNested(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-// TestBugCondition_PointerToStruct tests that pointer-to-struct
-// fields are dereferenced and recursively converted.
+// TestBugCondition_PointerToStruct verifies that *T fields are
+// dereferenced and recursively converted, not stored as raw pointers.
 func TestBugCondition_PointerToStruct(t *testing.T) {
 	input := WithPointer{
 		Name:    "test",
@@ -242,8 +249,9 @@ func TestBugCondition_PointerToStruct(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-// TestBugCondition_NilPointerToStruct tests nil pointer-to-struct
-// fields are stored as nil without panic.
+// TestBugCondition_NilPointerToStruct confirms that nil *T fields
+// are stored as nil in the map without causing a nil-dereference
+// panic — a common crash vector in reflection-heavy code.
 func TestBugCondition_NilPointerToStruct(t *testing.T) {
 	input := Node{
 		Value: 42,
@@ -266,8 +274,9 @@ func TestBugCondition_NilPointerToStruct(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-// TestBugCondition_UnexportedFields verifies no panic occurs and only
-// exported fields appear in output.
+// TestBugCondition_UnexportedFields verifies that unexported fields
+// are silently skipped (no panic from reflect.Interface()) and never
+// appear in the output map.
 func TestBugCondition_UnexportedFields(t *testing.T) {
 	input := HasUnexported{
 		Public: "visible",

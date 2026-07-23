@@ -26,13 +26,23 @@ import (
 	"github.com/aws/smithy-go/logging"
 )
 
+// errUnknownRegion is returned when no region can be determined. AWS
+// API calls require a region; failing fast here produces a clear error
+// message rather than a cryptic SDK failure downstream.
 var errUnknownRegion = errors.New("please specify an AWS region")
 
 type (
-	// NoOpRateLimit to prevent limiting of queries to AWS.
+	// NoOpRateLimit satisfies the SDK's rate-limiter interface but never
+	// throttles. This is useful when the caller already manages
+	// concurrency externally (e.g., worker pools with bounded
+	// parallelism) and SDK-level rate limiting would add unnecessary
+	// latency.
 	NoOpRateLimit struct{}
 
-	// AWSConfigOptions to manage AWS configuration options.
+	// AWSConfigOptions bundles the knobs callers can tweak when
+	// building an AWS config. Grouping them in a struct keeps
+	// GetAWSConfig's signature stable as new options are added over
+	// time.
 	AWSConfigOptions struct {
 		Region  string
 		Profile string
@@ -41,22 +51,29 @@ type (
 	}
 )
 
-// AddTokens to return nil for NoOpRateLimit.
+// AddTokens is a no-op so the rate limiter never blocks on token
+// replenishment.
 func (NoOpRateLimit) AddTokens(uint) error {
 	return nil
 }
 
-// GetToken will return nil so that there will be no rate limiting.
+// GetToken always succeeds immediately, ensuring requests are never
+// delayed by SDK-internal rate limiting.
 func (NoOpRateLimit) GetToken(context.Context, uint) (func() error, error) {
 	return noOpToken, nil
 }
 
+// noOpToken is the release callback returned by GetToken. It does
+// nothing because there is no token budget to return to.
 func noOpToken() error {
 	return nil
 }
 
-// GetAWSConfig returns a standard AWS config object pre-configured for use with
-// regions, retries, and verbosity.
+// GetAWSConfig builds an aws.Config with opinionated defaults suitable
+// for CLI tools: automatic region discovery from environment variables,
+// bounded retries, and optional request/response logging for
+// troubleshooting. The variadic opts parameter lets callers override
+// defaults without changing every call site when a new option is added.
 //
 // If region is empty, we will attempt to read AWS_REGION then
 // AWS_DEFAULT_REGION.
@@ -79,10 +96,17 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 		retries = opt.Retries
 		verbose = opt.Verbose
 
+		// Fall back to the AWS_PROFILE environment variable so users
+		// who set it globally don't have to pass --profile on every
+		// invocation.
 		if profile == "" {
 			profile = os.Getenv("AWS_PROFILE")
 		}
 
+		// Region resolution follows the same precedence as the AWS CLI:
+		// explicit option > AWS_REGION > AWS_DEFAULT_REGION. Failing
+		// here is intentional — an API call without a region produces
+		// confusing SDK errors.
 		if region == "" {
 			region, ok = os.LookupEnv("AWS_REGION")
 			if !ok {
@@ -93,12 +117,18 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 			}
 		}
 
+		// Default to 3 retries as a safety net against transient
+		// network errors without being so aggressive that a broken
+		// endpoint stalls the CLI for too long.
 		if retries == 0 {
 			retries = 3
 		}
 	}
 
-	// Pull AWS credentials from the environment.
+	// Pull AWS credentials from the environment. The SDK's default
+	// credential chain handles ~/.aws/credentials, IAM roles, SSO
+	// tokens, and container credentials — we just configure the
+	// behavioral knobs on top.
 	conf, err := config.LoadDefaultConfig(
 		ctx,
 		config.WithRegion(region),
@@ -131,6 +161,9 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 		return emptyConfig, fmt.Errorf("AWS configuration error: %w", err)
 	}
 
+	// Attach a stderr logger when verbose mode is on so AWS SDK debug
+	// output goes to the diagnostic stream, not stdout (which may be
+	// piped to jq or another tool).
 	if verbose {
 		conf.Logger = logging.NewStandardLogger(os.Stderr)
 	}

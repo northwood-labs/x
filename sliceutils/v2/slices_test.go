@@ -17,7 +17,10 @@ package sliceutils
 import "testing"
 
 var (
-	// Not sorted, with duplicates.
+	// inputListStrings is intentionally unsorted and contains
+	// duplicates. It simulates real-world cloud resource lists that
+	// arrive from paginated API responses where the same resource can
+	// appear in multiple pages.
 	inputListStrings = []string{
 		"apiaccountingconfig",
 		"cloudcredentials",
@@ -80,7 +83,9 @@ var (
 		"buildproject",
 	}
 
-	// Sorted, without duplicates.
+	// outputListStrings is the expected result after deduplication:
+	// sorted ascending with no duplicates. Tests compare against this
+	// to verify both the sort order and the uniqueness guarantee.
 	outputListStrings = []string{
 		"accessanalyzer",
 		"accesslistflowlog",
@@ -141,11 +146,17 @@ var (
 	outputListUInts    = []uint{1, 2, 3, 5, 8, 13}
 )
 
+// filterSubstrTestUser is a minimal struct used to prove that
+// FilterSubstr and FilterRegex work with complex types, not just
+// plain strings.
 type filterSubstrTestUser struct {
 	User string
 	Key  string
 }
 
+// TestDedupeStrings exercises the primary use case: deduplicating a
+// large list of cloud resource type identifiers that may arrive with
+// duplicates from multiple API pages.
 func TestDedupeStrings(t *testing.T) {
 	workingList := Dedupe(inputListStrings)
 	outputList := outputListStrings
@@ -161,6 +172,9 @@ func TestDedupeStrings(t *testing.T) {
 	}
 }
 
+// TestDedupeFloat32s confirms that floating-point values are
+// deduplicated correctly despite IEEE 754 representation — important
+// because naive equality checks can be surprising with floats.
 func TestDedupeFloat32s(t *testing.T) {
 	workingList := Dedupe(inputListFloat32s)
 	outputList := outputListFloat32s
@@ -176,6 +190,8 @@ func TestDedupeFloat32s(t *testing.T) {
 	}
 }
 
+// TestDedupeFloat64s mirrors TestDedupeFloat32s for the 64-bit
+// variant, ensuring the generic constraint handles both widths.
 func TestDedupeFloat64s(t *testing.T) {
 	workingList := Dedupe(inputListFloat64s)
 	outputList := outputListFloat64s
@@ -191,6 +207,7 @@ func TestDedupeFloat64s(t *testing.T) {
 	}
 }
 
+// TestDedupeInt64s verifies deduplication for signed 64-bit integers.
 func TestDedupeInt64s(t *testing.T) {
 	workingList := Dedupe(inputListInt64s)
 	outputList := outputListInt64s
@@ -206,6 +223,8 @@ func TestDedupeInt64s(t *testing.T) {
 	}
 }
 
+// TestDedupeInts covers the default int type, the most common numeric
+// type in Go code.
 func TestDedupeInts(t *testing.T) {
 	workingList := Dedupe(inputListInts)
 	outputList := outputListInts
@@ -221,6 +240,8 @@ func TestDedupeInts(t *testing.T) {
 	}
 }
 
+// TestDedupeUInt64s verifies deduplication for unsigned 64-bit
+// integers, ensuring the sort comparator handles unsigned types.
 func TestDedupeUInt64s(t *testing.T) {
 	workingList := Dedupe(inputListUInt64s)
 	outputList := outputListUInt64s
@@ -236,6 +257,8 @@ func TestDedupeUInt64s(t *testing.T) {
 	}
 }
 
+// TestDedupeUInts rounds out the numeric coverage for the default
+// unsigned type.
 func TestDedupeUInts(t *testing.T) {
 	workingList := Dedupe(inputListUInts)
 	outputList := outputListUInts
@@ -251,6 +274,8 @@ func TestDedupeUInts(t *testing.T) {
 	}
 }
 
+// TestStringSliceToHashmap verifies that every slice element becomes a
+// key in the resulting map, enabling O(1) membership checks.
 func TestStringSliceToHashmap(t *testing.T) {
 	workingMap := StringSliceToHashmap(outputListStrings)
 
@@ -261,6 +286,9 @@ func TestStringSliceToHashmap(t *testing.T) {
 	}
 }
 
+// TestFilterSubstrStructSlice proves that the callback-based design
+// works with struct slices, letting callers define which fields are
+// searchable without modifying the filter implementation.
 func TestFilterSubstrStructSlice(t *testing.T) {
 	input := []filterSubstrTestUser{
 		{User: "alice", Key: "team-red"},
@@ -281,6 +309,8 @@ func TestFilterSubstrStructSlice(t *testing.T) {
 	}
 }
 
+// TestFilterSubstrStringSlice verifies the simplest generic
+// instantiation where the callback is an identity function.
 func TestFilterSubstrStringSlice(t *testing.T) {
 	input := []string{"alpha", "bravo", "charlie"}
 
@@ -301,6 +331,9 @@ func TestFilterSubstrStringSlice(t *testing.T) {
 	}
 }
 
+// TestFilterRegexStructSlice confirms regex filtering works with
+// struct slices, supporting power-user patterns like anchors and
+// alternation.
 func TestFilterRegexStructSlice(t *testing.T) {
 	input := []filterSubstrTestUser{
 		{User: "alice", Key: "team-red"},
@@ -321,6 +354,8 @@ func TestFilterRegexStructSlice(t *testing.T) {
 	}
 }
 
+// TestFilterRegexStringSlice exercises regex filtering with plain
+// strings and a multi-alternative pattern.
 func TestFilterRegexStringSlice(t *testing.T) {
 	input := []string{"alpha", "bravo", "charlie", "delta"}
 

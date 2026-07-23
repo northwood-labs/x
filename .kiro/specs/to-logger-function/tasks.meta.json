@@ -1,0 +1,295 @@
+{
+  "pbtResults": {
+    "4.1 Create `structs_tologger_property_test.go` with property test for pointer equivalence": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756656988
+    },
+    "4.2 Write property test for non-struct rejection": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756825998
+    },
+    "4.3 Write property test for even length invariant": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756826906
+    },
+    "4.4 Write property test for keys-are-strings-at-even-indices": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756828031
+    },
+    "4.5 Write property test for output keys sorted": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756828749
+    },
+    "4.6 Write property test for deterministic output": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756829537
+    },
+    "4.7 Write property test for nested dot notation": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756830307
+    },
+    "4.8 Write property test for nil pointer key emission": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756831195
+    },
+    "4.9 Write property test for exported-only fields": {
+      "status": "passed",
+      "lastRunTimestamp": 1784756832084
+    }
+  },
+  "executionHistory": {
+    "1.1 Add the `pair` struct type and `structToLogger` recursive helper to `structs.go`": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755626467
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755634230
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755955888
+      }
+    ],
+    "1.2 Add the public `ToLogger` function to `structs.go`": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755626542
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755959338
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756061112
+      }
+    ],
+    "2.1 Create `structs_tologger_test.go` with `ExampleToLogger`": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755626641
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756064560
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756239950
+      }
+    ],
+    "2.2 Add `BenchmarkToLogger` and `BenchmarkToLoggerParallel` to the same file": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755627086
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756243519
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756326166
+      }
+    ],
+    "2.3 Add `FuzzToLogger` to the same file": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755627136
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756329458
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756434124
+      }
+    ],
+    "3. Checkpoint": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755627191
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756437411
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756504090
+      }
+    ],
+    "4.1 Create `structs_tologger_property_test.go` with property test for pointer equivalence": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755627238
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756508883
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756667229
+      }
+    ],
+    "5. Final checkpoint": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784755627286
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756863315
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784757009531
+      }
+    ],
+    "1. Implement ToLogger function and internal helper": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756061205
+      }
+    ],
+    "2. Add example, benchmark, and fuzz tests": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756434181
+      }
+    ],
+    "4. Add property-based tests": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756667279
+      }
+    ],
+    "4.2 Write property test for non-struct rejection": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756683522
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756851432
+      }
+    ],
+    "4.3 Write property test for even length invariant": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756684239
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756852181
+      }
+    ],
+    "4.4 Write property test for keys-are-strings-at-even-indices": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756685039
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756852990
+      }
+    ],
+    "4.5 Write property test for output keys sorted": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756685800
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756853884
+      }
+    ],
+    "4.6 Write property test for deterministic output": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756686649
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756854544
+      }
+    ],
+    "4.7 Write property test for nested dot notation": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756690154
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756857908
+      }
+    ],
+    "4.8 Write property test for nil pointer key emission": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756690931
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756858652
+      }
+    ],
+    "4.9 Write property test for exported-only fields": [
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756691773
+      },
+      {
+        "executionId": "082d4df3-355f-46ee-b3f6-9345cbcdc84c",
+        "chatSessionId": "sess_c1bb004e-6650-4952-863c-12cc670388bd",
+        "timestamp": 1784756859383
+      }
+    ]
+  }
+}

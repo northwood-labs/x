@@ -14,6 +14,10 @@
 
 package arch
 
+// Bit-width and vendor-family constants are composed into the ArchMap
+// values below. Keeping them as named constants avoids repetition and
+// makes it easy to update branding in one place (e.g., if "Loongson"
+// were rebranded).
 const (
 	b32 = " (32-bit)"
 	b64 = " (64-bit)"
@@ -32,7 +36,10 @@ const (
 // go tool dist list.
 
 var (
-	// OSMap is a mapping of GOOS values to "friendly" values.
+	// OSMap translates GOOS identifiers into user-facing operating system
+	// names. The Go toolchain uses terse identifiers that are meaningful to
+	// developers but opaque to end-users reading release notes, version
+	// strings, or diagnostic output.
 	// https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63
 	// http://bit.ly/4b8bHz3
 	OSMap = map[string]string{
@@ -55,7 +62,10 @@ var (
 		"zos":       "IBM z/OS",       // https://www.ibm.com/products/zos
 	}
 
-	// ArchMap is a mapping of GOARCH values to "friendly" values.
+	// ArchMap translates GOARCH identifiers into friendly architecture
+	// names that combine the vendor family with the bit-width. This lets
+	// downstream code produce strings like "ARM (64-bit)" without
+	// hard-coding display logic at each call site.
 	// https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63
 	// http://bit.ly/4b8bHz3
 	ArchMap = map[string]string{

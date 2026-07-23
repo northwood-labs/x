@@ -14,8 +14,12 @@
 
 package maputils
 
-// MapToLogger converts a map[string]any to a slice of alternating keys and
-// values compatible with slog's key-value logging format.
+// MapToLogger flattens a map into the alternating key-value slice that
+// slog expects for structured log fields. This avoids forcing callers
+// to manually interleave keys and values every time they want to attach
+// a dynamic set of attributes to a log line. Returning nil for an empty
+// map lets callers pass the result directly to slog without an extra
+// length check — slog safely ignores nil args.
 func MapToLogger(m map[string]any) []any {
 	if len(m) == 0 {
 		return nil

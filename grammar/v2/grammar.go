@@ -14,8 +14,11 @@
 
 package grammar
 
-// Pluralize allows you to pass an amount, and a singular + plural form of a
-// word. The correct form of the word will be used. U.S. English-only.
+// Pluralize selects between the singular and plural form of a word
+// based on the count. CLI status messages frequently display item
+// counts, and returning the grammatically correct form here keeps
+// that concern out of the command logic. Only U.S. English is
+// supported because all current consumers produce English output.
 func Pluralize(amount int, singular, plural string) string {
 	if amount == 1 {
 		return singular

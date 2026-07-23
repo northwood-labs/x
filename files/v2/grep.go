@@ -20,9 +20,13 @@ import (
 	"regexp"
 )
 
-// GrepFile will search a file for a regular expression and return true if it is
-// found. The regular expression is compiled and used to search the file
-// contents.
+// GrepFile searches the contents of a file for a regex pattern and
+// returns whether a match was found. This is used by config validation
+// to confirm that managed markers or expected content are present in a
+// file without requiring the caller to handle file I/O and regex
+// compilation separately. The entire file is read into memory because
+// config files are small and line-by-line scanning would complicate
+// multi-line pattern matching.
 func GrepFile(path, s string) (bool, error) {
 	b, err := os.ReadFile(path) // lint:allow_possible_insecure
 	if err != nil {

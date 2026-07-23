@@ -24,6 +24,9 @@ import (
 )
 
 // **Validates: Requirements 3.1, 3.2, 3.3**.
+// These structs cover the spectrum of primitive field types (bool,
+// int, float64, string) to ensure that ToMap preserves values without
+// type coercion or loss.
 type (
 	// Settings has bool, int, and string fields.
 	Settings struct {
@@ -60,8 +63,10 @@ type (
 	}
 )
 
-// TestPreservation_PrimitiveOnlyStructs verifies that primitive-only structs
-// produce the expected flat map on unfixed code.
+// TestPreservation_PrimitiveOnlyStructs is a table-driven test that
+// confirms each primitive-only struct shape produces the exact flat
+// map expected, catching any type coercion bugs (e.g., int becoming
+// float64).
 func TestPreservation_PrimitiveOnlyStructs(t *testing.T) {
 	tests := map[string]struct {
 		Input    any
@@ -112,8 +117,9 @@ func TestPreservation_PrimitiveOnlyStructs(t *testing.T) {
 	}
 }
 
-// TestPreservation_PointerDereference verifies that pointer-to-struct inputs
-// produce the same result as by-value for diverse types.
+// TestPreservation_PointerDereference verifies that passing *T
+// produces identical output to passing T by value, so callers don't
+// need to worry about the indirection level.
 func TestPreservation_PointerDereference(t *testing.T) {
 	t.Run("Profile", func(t *testing.T) {
 		byVal, err1 := ToMap(Profile{Hobby: "y"})
@@ -158,8 +164,9 @@ func TestPreservation_PointerDereference(t *testing.T) {
 	})
 }
 
-// TestPreservation_NonStructError verifies the error path for
-// non-struct inputs.
+// TestPreservation_NonStructError verifies the guard clause: passing
+// a non-struct (int, string, slice, bool) must return a descriptive
+// error and nil map rather than panicking inside reflection.
 func TestPreservation_NonStructError(t *testing.T) {
 	tests := map[string]struct {
 		Input any

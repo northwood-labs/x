@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package arch  provides a set of utilities for displaying platforms and
-// architectures.
+// Package arch provides utilities for translating raw GOOS/GOARCH
+// identifiers into human-readable platform names. CLI tools and release
+// notes need to present build targets in a way that non-developers can
+// understand (e.g., "macOS on Apple Silicon" rather than "darwin/arm64").
+// Centralizing these mappings avoids scattering display logic across
+// every command that prints version or platform information.
 package arch

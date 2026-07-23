@@ -16,10 +16,15 @@ package arch
 
 import "fmt"
 
+// wasmID is extracted as a constant because it appears in multiple
+// conditional checks below and a typo would silently produce the wrong
+// platform string.
 const wasmID = "wasm"
 
-// GetFriendlyName takes the values of GOOS and GOARCH, and returns a "friendly"
-// name for the pairing (U.S. English).
+// GetFriendlyName takes the values of GOOS and GOARCH, and returns a
+// human-readable platform name (U.S. English). This is the single entry
+// point for turning raw build-target identifiers into something suitable
+// for version banners, release notes, and user-facing diagnostics.
 func GetFriendlyName(osStr, archStr string) string {
 	var (
 		osFriendly   string
@@ -29,6 +34,9 @@ func GetFriendlyName(osStr, archStr string) string {
 	osFriendly = osStr
 	archFriendly = archStr
 
+	// WebAssembly targets are special-cased because combining OS + arch
+	// ("JavaScript on WebAssembly") reads awkwardly. A single branded
+	// name is clearer for users.
 	if osStr == "js" && archStr == wasmID {
 		return "WebAssembly"
 	}
@@ -37,10 +45,15 @@ func GetFriendlyName(osStr, archStr string) string {
 		return "WebAssembly with WASI Preview 1"
 	}
 
+	// Apple Silicon is the marketing name users recognize; "macOS on
+	// ARM (64-bit)" would be technically correct but unfamiliar.
 	if osStr == "darwin" && archStr == "arm64" {
 		return "macOS on Apple Silicon"
 	}
 
+	// Fall through to the generic lookup tables for all other
+	// combinations, keeping the raw identifier as a fallback if the
+	// map doesn't contain the value (future Go ports).
 	if val, ok := OSMap[osStr]; ok {
 		osFriendly = val
 	}

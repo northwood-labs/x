@@ -12,5 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package typeutils provides new types to use.
+// Package typeutils provides custom types that extend Go's standard
+// library with serialization behaviors the stdlib does not offer out
+// of the box. The primary use case is JSON time handling: APIs return
+// timestamps as either Unix integers or RFC 3339 strings, but Go's
+// time.Time only supports RFC 3339 natively via encoding/json. These
+// wrapper types let structs declare the wire format declaratively via
+// their type, so JSON marshaling and unmarshaling happen correctly
+// without custom per-field logic in every consumer.
 package typeutils

@@ -16,8 +16,13 @@ package arch
 
 import "testing"
 
+// errorMessage is reused across all table-driven assertions to provide
+// consistent failure output showing expected vs actual values.
 const errorMessage = "Result was `%s` instead of `%s`."
 
+// TestGetFriendlyNameJS confirms the pure-WebAssembly special case
+// (js/wasm) collapses into a single branded name rather than the
+// generic "OS on Arch" format.
 func TestGetFriendlyNameJS(t *testing.T) {
 	expected := "WebAssembly"
 	actual := GetFriendlyName("js", "wasm")
@@ -27,6 +32,9 @@ func TestGetFriendlyNameJS(t *testing.T) {
 	}
 }
 
+// TestGetFriendlyNameASi confirms the Apple Silicon special case
+// produces the marketing name users expect rather than "macOS on
+// ARM (64-bit)".
 func TestGetFriendlyNameASi(t *testing.T) {
 	expected := "macOS on Apple Silicon"
 	actual := GetFriendlyName("darwin", "arm64")
@@ -36,6 +44,8 @@ func TestGetFriendlyNameASi(t *testing.T) {
 	}
 }
 
+// TestGetFriendlyNameLinux64 exercises the common-path lookup where
+// both OS and arch are present in their respective maps.
 func TestGetFriendlyNameLinux64(t *testing.T) {
 	expected := "Linux on Intel (64-bit)"
 	actual := GetFriendlyName("linux", "amd64")
@@ -45,6 +55,8 @@ func TestGetFriendlyNameLinux64(t *testing.T) {
 	}
 }
 
+// TestGetFriendlyNameNoOS verifies that a less common OS (illumos)
+// still resolves correctly when present in OSMap.
 func TestGetFriendlyNameNoOS(t *testing.T) {
 	expected := "illumos on Intel (64-bit)"
 	actual := GetFriendlyName("illumos", "amd64")
@@ -54,6 +66,8 @@ func TestGetFriendlyNameNoOS(t *testing.T) {
 	}
 }
 
+// TestGetFriendlyNameNoOSArch verifies the mainframe combination
+// (zos/s390x) maps to full branded names for both OS and arch.
 func TestGetFriendlyNameNoOSArch(t *testing.T) {
 	expected := "IBM z/OS on System/390 (64-bit)"
 	actual := GetFriendlyName("zos", "s390x")

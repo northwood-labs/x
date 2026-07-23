@@ -16,7 +16,11 @@ package debugutils
 
 import "github.com/davecgh/go-spew/spew"
 
-// GetSpew is analogous to PrettyPrint in Python or print_r() in PHP.
+// GetSpew returns a pre-configured spew instance tuned for human
+// readability during development. Sorted and spewed keys ensure that
+// output is deterministic regardless of map iteration order, making it
+// safe to diff two dumps. The 4-space indent matches the project's
+// editor settings so pasted output aligns with surrounding code.
 func GetSpew() spew.ConfigState {
 	return spew.ConfigState{
 		Indent:   "    ",

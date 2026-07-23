@@ -16,6 +16,9 @@ package maputils
 
 import "testing"
 
+// TestMapToLoggerNilOnEmpty ensures that an empty map produces nil
+// rather than a zero-length slice. slog treats nil args as a no-op,
+// so callers can pass the result without guarding against empty input.
 func TestMapToLoggerNilOnEmpty(t *testing.T) {
 	emptyMap := make(map[string]any)
 	result := MapToLogger(emptyMap)
@@ -25,6 +28,9 @@ func TestMapToLoggerNilOnEmpty(t *testing.T) {
 	}
 }
 
+// TestMapToLoggerLength verifies that the output slice contains
+// exactly twice as many elements as the input map (one key + one
+// value per entry), catching off-by-one errors in the append loop.
 func TestMapToLoggerLength(t *testing.T) {
 	input := map[string]any{
 		"env":     "production",
@@ -39,6 +45,10 @@ func TestMapToLoggerLength(t *testing.T) {
 	}
 }
 
+// TestMapToLoggerKeysAndValues confirms that every original key-value
+// pair survives the conversion intact. Because map iteration order is
+// non-deterministic, we verify membership rather than positional
+// equality.
 func TestMapToLoggerKeysAndValues(t *testing.T) {
 	input := map[string]any{
 		"env":     "production",

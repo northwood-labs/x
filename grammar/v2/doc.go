@@ -12,5 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package grammar provides tools for working with English grammar.
+// Package grammar provides English-language formatting helpers for
+// user-facing CLI output. When a command reports counts ("1 file
+// synced" vs "3 files synced"), hard-coding both forms at every call
+// site is error-prone and clutters the logic. This package
+// centralizes pluralization so output reads naturally without
+// duplicating conditional grammar logic across commands.
 package grammar

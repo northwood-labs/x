@@ -20,6 +20,8 @@ import (
 	"testing"
 )
 
+// TestFileExistsFile confirms the happy path: a real file on disk is
+// reported as existing.
 func TestFileExistsFile(t *testing.T) {
 	t.Parallel()
 
@@ -35,6 +37,8 @@ func TestFileExistsFile(t *testing.T) {
 	}
 }
 
+// TestFileExistsMissing verifies that a non-existent path returns
+// false rather than panicking or returning an error.
 func TestFileExistsMissing(t *testing.T) {
 	t.Parallel()
 
@@ -46,6 +50,9 @@ func TestFileExistsMissing(t *testing.T) {
 	}
 }
 
+// TestFileExistsDirectory ensures that a directory is not mistaken for
+// a file. Callers rely on this distinction to avoid accidentally
+// reading a directory as if it were a config file.
 func TestFileExistsDirectory(t *testing.T) {
 	t.Parallel()
 

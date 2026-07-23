@@ -22,20 +22,30 @@ import (
 )
 
 type (
-	// UnixTime represents a [time.Time] object that is serialized as a Unix
-	// timestamp.
+	// UnixTime wraps time.Time so that JSON (un)marshaling uses a Unix
+	// epoch integer instead of the default RFC 3339 string. Many APIs
+	// (GitHub, AWS, POSIX tools) expose timestamps as integers; this
+	// type lets consumers decode them directly into a time.Time without
+	// manual conversion at every call site.
 	UnixTime struct {
 		time.Time
 	}
 
-	// RFC3339Time represents a [time.Time] object that is serialized as an
-	// RFC3339 timestamp.
+	// RFC3339Time wraps time.Time so that JSON (un)marshaling always
+	// uses RFC 3339 format with explicit timezone offset. Unlike the
+	// default encoding/json behavior (which already uses RFC 3339),
+	// this type strips surrounding quotes during Unmarshal and
+	// normalizes to UTC on Marshal, providing consistent round-trip
+	// behavior for APIs that return timezone-aware strings.
 	RFC3339Time struct {
 		time.Time
 	}
 )
 
-// UnmarshalJSON is the method that satisfies the Unmarshaller interface.
+// UnmarshalJSON decodes a JSON integer (Unix epoch seconds) into the
+// embedded time.Time. This satisfies the json.Unmarshaler interface so
+// the standard json.Unmarshal call handles UnixTime fields
+// automatically.
 func (u *UnixTime) UnmarshalJSON(b []byte) error {
 	var timestamp int64
 
@@ -49,12 +59,15 @@ func (u *UnixTime) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// MarshalJSON turns our [time.Time] back into an integer.
+// MarshalJSON encodes the time as a bare integer (Unix epoch seconds)
+// so downstream consumers receive the same integer format they sent.
 func (u UnixTime) MarshalJSON() ([]byte, error) { // lint:allow_param
 	return fmt.Appendf(nil, "%d", u.Unix()), nil
 }
 
-// UnmarshalJSON is the method that satisfies the Unmarshaller interface.
+// UnmarshalJSON decodes a JSON string in RFC 3339 format into the
+// embedded time.Time. Surrounding quotes are stripped before parsing
+// because encoding/json delivers the raw token including quotes.
 func (r *RFC3339Time) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), "\"")
 
@@ -68,7 +81,9 @@ func (r *RFC3339Time) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// MarshalJSON turns our [time.Time] back into an integer.
+// MarshalJSON encodes the time as a quoted RFC 3339 string normalized
+// to UTC, ensuring consistent output regardless of the original
+// timezone.
 func (r *RFC3339Time) MarshalJSON() ([]byte, error) { // lint:allow_param
 	return fmt.Appendf(nil, "%q", r.UTC().Format(time.RFC3339)), nil
 }

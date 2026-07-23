@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package sliceutils provides a set of utility functions for working with
-// slices.
+// Package sliceutils provides generic slice operations that the
+// standard library's slices package does not cover. CLI tools
+// frequently need to deduplicate user-supplied lists, convert slices
+// into lookup maps for O(1) membership tests, and filter collections
+// by substring or regex. Centralizing these operations avoids
+// re-implementing the same patterns (with the same edge-case bugs)
+// in every command.
 package sliceutils

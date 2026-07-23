@@ -12,5 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package aws provides a set of AWS utilities for Go.
+// Package aws provides shared AWS SDK configuration helpers. Multiple
+// CLI tools and services in this organization need authenticated AWS
+// clients with consistent retry behavior, region resolution, and
+// optional debug logging. Centralizing that setup here avoids
+// duplicating boilerplate and ensures uniform defaults (retry counts,
+// environment variable fallback order, log verbosity) across all
+// consumers.
 package aws

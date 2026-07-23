@@ -12,5 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package structutils provides utilities for working with Go structs.
+// Package structutils provides reflection-based converters that turn
+// arbitrary Go structs into maps or flat key-value slices. Structured
+// logging (slog) and generic serialization layers need data as
+// map[string]any or []any rather than typed structs. Writing manual
+// conversion functions for every struct is tedious and error-prone;
+// this package uses reflection to handle any struct shape — including
+// nested and pointer fields — so callers get correct, recursive
+// conversion without boilerplate.
 package structutils

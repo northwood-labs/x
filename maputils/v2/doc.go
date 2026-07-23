@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package maputils provides a set of helpful utilities for working with Go
-// maps.
+// Package maputils provides helpers for transforming Go maps into
+// formats required by other subsystems. The primary consumer is
+// structured logging (slog), which accepts key-value pairs as
+// variadic []any arguments. Converting a map into that layout is
+// mechanical but easy to get wrong (forgetting to interleave keys
+// and values), so centralizing the conversion prevents subtle
+// logging bugs across all commands.
 package maputils

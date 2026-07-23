@@ -21,8 +21,11 @@ import (
 	"strings"
 )
 
-// ComparableT is a list of types that can be compared that is semi-broken in
-// 1.18 and 1.19, but fixed in 1.20.
+// ComparableT enumerates the concrete types Dedupe can operate on.
+// Go 1.18/1.19 had compiler bugs around the built-in comparable
+// constraint with certain type sets, so this explicit union ensures
+// correct behavior across all supported Go versions (1.20+). Using a
+// tilde (~) on each type permits named types derived from primitives.
 type ComparableT interface {
 	~byte |
 		~float32 |
@@ -40,30 +43,32 @@ type ComparableT interface {
 		~uintptr
 }
 
-// Dedupe will remove duplicate values from a variety of types.
-//
-// `comparable` is (supposed to be) a type that can be compared, but there were
-// issues in 1.18 and 1.19 that were resolved in 1.20.
-// https://blog.carlmjohnson.net/post/2023/golang-120-language-changes/
+// Dedupe removes duplicate values from a slice, returning a sorted,
+// unique result. Many CLI inputs (cloud resource lists, config keys)
+// arrive with duplicates from multiple sources; deduplication prevents
+// redundant API calls and duplicate output lines. The in-place
+// algorithm avoids allocating a second slice, which matters when lists
+// are large (e.g., thousands of cloud resources).
 //
 // ~rune is an alias of ~int32. ~byte is an alias of ~uint8.
 //
 // https://hackernoon.com/how-to-remove-duplicates-in-go-slices
 func Dedupe[T ComparableT](s []T) []T {
-	// If there are 0 or 1 items we return the slice itself.
+	// Short-circuit: a slice with 0 or 1 elements is already unique.
 	if len(s) < 2 { // lint:allow_raw_numbers
 		return s
 	}
 
-	// Make the slice case-insensitive, ascending, sorted.
+	// Sorting first allows a single linear pass to collapse duplicates
+	// by comparing adjacent elements, achieving O(n log n) overall
+	// instead of the O(n²) of a nested-loop approach.
 	slices.SortStableFunc(s, cmp.Compare)
 
 	uniqPointer := 0
 
 	for i := 1; i < len(s); i++ {
-		// Compare a current item with the item under the unique pointer. If
-		// they are not the same, write the item next to the right of the unique
-		// pointer.
+		// Advance the unique pointer only when we encounter a new
+		// distinct value, effectively compacting the slice in-place.
 		if s[uniqPointer] != s[i] {
 			uniqPointer++
 
@@ -74,7 +79,11 @@ func Dedupe[T ComparableT](s []T) []T {
 	return s[:uniqPointer+1]
 }
 
-// StringSliceToHashmap will invert the values of a slice to keys in a hashmap.
+// StringSliceToHashmap converts a string slice into a set (map with
+// empty-struct values) for O(1) membership lookups. This is used when
+// a command needs to quickly test whether a value exists in a
+// potentially large allow-list or deny-list without scanning the slice
+// on each check.
 func StringSliceToHashmap(slice []string) map[string]struct{} {
 	hashmap := make(map[string]struct{})
 
@@ -85,8 +94,11 @@ func StringSliceToHashmap(slice []string) map[string]struct{} {
 	return hashmap
 }
 
-// FilterSubstr will filter a slice of any type by a substring. The callback is
-// used to convert the type to a string for comparison.
+// FilterSubstr returns elements whose string representation contains a
+// given substring. The callback lets callers define which field(s) of a
+// complex type are searchable, decoupling the filter logic from any
+// particular struct layout. This powers interactive search/filter UIs
+// where the user types a partial name.
 func FilterSubstr[T any](u []T, s string, callback func(T) string) []T {
 	out := make([]T, 0, len(u))
 
@@ -99,8 +111,12 @@ func FilterSubstr[T any](u []T, s string, callback func(T) string) []T {
 	return out
 }
 
-// FilterRegex will filter a slice of any type by a regular expression. The
-// callback is used to convert the type to a string for comparison.
+// FilterRegex returns elements whose string representation matches a
+// regular expression. Like FilterSubstr, the callback decouples field
+// selection from filtering. Regex is offered alongside substring
+// filtering because power users need anchors and alternation for
+// precise filtering (e.g., "^prod-" to match only production
+// resources).
 func FilterRegex[T any](u []T, r string, callback func(T) string) []T {
 	out := make([]T, 0, len(u))
 	re := regexp.MustCompile(r)

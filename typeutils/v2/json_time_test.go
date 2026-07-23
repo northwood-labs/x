@@ -23,16 +23,22 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+// testRFC3339JSON is a minimal wrapper struct that lets us test
+// RFC3339Time's JSON behavior via encoding/json round-trips.
 type (
 	testRFC3339JSON struct {
 		Timestamp RFC3339Time `json:"timestamp"`
 	}
 
+	// testUnixJSON is the equivalent wrapper for UnixTime testing.
 	testUnixJSON struct {
 		Timestamp UnixTime `json:"timestamp"`
 	}
 )
 
+// tz loads a timezone location by IANA name, panicking on failure
+// because test inputs use known-good zone names and a failure here
+// indicates a broken test environment, not a code bug.
 func tz(z string) *time.Location {
 	loc, err := time.LoadLocation(z)
 	if err != nil {
@@ -42,6 +48,12 @@ func tz(z string) *time.Location {
 	return loc
 }
 
+// TestRFC3339Time verifies that RFC3339Time round-trips correctly
+// across multiple timezones. Each case unmarshals a JSON string,
+// checks the resulting time.Time value matches the expected instant,
+// then re-marshals and confirms the output matches the original
+// input (modulo UTC Zulu normalization). This exercises both
+// timezone-offset parsing and UTC normalization on output.
 func TestRFC3339Time(t *testing.T) {
 	type testCase struct {
 		expected time.Time
@@ -116,6 +128,12 @@ func TestRFC3339Time(t *testing.T) {
 	}
 }
 
+// TestUnixTime verifies that UnixTime round-trips correctly for
+// well-known epoch values spanning decades. Each case unmarshals a
+// JSON integer, checks the resulting time matches the expected date,
+// then re-marshals and confirms the output integer is identical to
+// the input. This catches off-by-one errors in second/millisecond
+// interpretation.
 func TestUnixTime(t *testing.T) {
 	type testCase struct {
 		expected time.Time
