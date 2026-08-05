@@ -1,0 +1,4 @@
+github.com/go-openapi/testify v0.0.0-20251001202347-e909893202bd h1:+xqXbJEPxWM3YMAJ7yKV2FyqC/V/Dn8XggLC4tsMBXo=
+github.com/go-openapi/testify v0.0.0-20251001202347-e909893202bd/go.mod h1:Eo7DE2AKidl1U1diMDA05WiNks99vsR7HUun6G6Vob4=
+golang.org/x/exp v0.0.0-20260727155853-b88d891fe743 h1:ex206bKw+v3K0dm3andkrIF+ijyQKJG1pLgwQ2PYdQM=
+golang.org/x/exp v0.0.0-20260727155853-b88d891fe743/go.mod h1:EdfpwwqSu+0Li0mzskwHU6FWDV3t9Q+RZDo3QMUtL3Q=
