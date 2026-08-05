@@ -19,5 +19,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), adheres t
 * [`61faa75`](https://github.com/northwood-labs/x/commit/61faa759ff4237590f3a0492994550a967f1f574): Added KiroGraph semantic code graph integration. ([@skyzyx](https://github.com/skyzyx))
 * [`00dc66a`](https://github.com/northwood-labs/x/commit/00dc66a1e1d3ef567254d38375a87ae243f5f012): Add structutils package with recursive struct-to-map conversion. ([@skyzyx](https://github.com/skyzyx))
 * [`27633a1`](https://github.com/northwood-labs/x/commit/27633a13c98ae8e93e5a6c45d6e2496c1d7e7f8e): Add ToLogger function for struct-to-slog conversion. ([@skyzyx](https://github.com/skyzyx))
+* [`9efa3ef`](https://github.com/northwood-labs/x/commit/9efa3efba6fc544063356b9e90ba3c7e1667aaf4): Add logutils and mathutils utility packages. ([@skyzyx](https://github.com/skyzyx))
 
-<p>Generated on 2026-07-23.</p>
+<p>Generated on 2026-08-05.</p>
